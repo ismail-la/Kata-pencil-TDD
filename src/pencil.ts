@@ -102,9 +102,18 @@ export class Pencil {
       this.appendToText(char);
       this.reduceDurability(this.calculateDurabilityCost(char));
     } else {
-      // If no durability is left, stop writing non-space characters
-      this.appendToText(" "); // Append a space instead of the character
+      // Handle the case where durability is zero
+      this.handleZeroDurability(char);
     }
+  }
+
+  /**
+   * Handles the case where the pencil has zero durability.
+   * @param char - The character to handle.
+   */
+  private handleZeroDurability(char: string): void {
+    // Append a space instead of the character
+    this.appendToText(" ");
   }
 
   /**
