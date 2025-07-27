@@ -59,4 +59,33 @@ describe("Pencil", () => {
     expect(pencil.getText()).toBe("A");
     expect(pencil.getDurability()).toBe(8);
   });
+
+  /**
+   * Test Case: Writing Spaces and Newlines
+   * ---------------------------------------
+   * This test case ensures that:
+   * 1. A pencil can write spaces or newlines without reducing its durability.
+   * 2. The written text matches the input provided to the `write` method.
+   * 3. The pencil's durability remains unchanged after writing spaces or newlines.
+   *
+   * Steps:
+   * 1. Create a pencil instance with an initial durability of 10.
+   * 2. Write a space character using the `write` method.
+   * 3. Verify that the text written matches the input and the durability
+   *    remains unchanged.
+   */
+
+  test("should write spaces without reducing durability", () => {
+    // Arrange: Create a pencil with an initial durability of 10
+    const pencil = new Pencil(10);
+
+    // Act: Write a space character
+    pencil.write(" ");
+
+    // Assert:
+    // 1. Verify that the written text matches the input (" ").
+    // 2. Verify that the pencil's durability remains unchanged (10).
+    expect(pencil.getText()).toBe(" ");
+    expect(pencil.getDurability()).toBe(10);
+  });
 });

@@ -88,10 +88,10 @@ export class Pencil {
    * @param char - The character to write.
    */
   write(char: string): void {
-    if (this.isDurable() && char !== " ") {
+    // Incorrectly reduce durability for all characters, including spaces
+    if (this.isDurable()) {
       this.text += char;
-      const durabilityCost = this.calculateDurabilityCost(char);
-      this.reduceDurability(durabilityCost);
+      this.reduceDurability(1); // This should not apply to spaces
     } else {
       this.text += char;
     }
