@@ -33,4 +33,30 @@ describe("Pencil", () => {
     expect(pencil.getText()).toBe("a");
     expect(pencil.getDurability()).toBe(9);
   });
+
+  /**
+   * Test Case: Writing Uppercase Letters
+   * -------------------------------------
+   * This test case ensures that:
+   * 1. A pencil can write an uppercase character.
+   * 2. Writing an uppercase character reduces the pencil's durability by 2.
+   * 3. The written text matches the input provided to the `write` method.
+   *
+   * Steps:
+   * 1. Create a pencil instance with an initial durability of 10.
+   * 2. Write an uppercase letter using the `write` method.
+   * 3. Verify that the text written matches the input and the durability
+   *    is reduced by 2.
+   */
+  test("should write an uppercase letter and reduce durability by 2", () => {
+    // Arrange: Create a pencil with an initial durability of 10
+    const pencil = new Pencil(10);
+
+    // Act: Write an uppercase letter
+    pencil.write("A");
+
+    // Assert: Verify the written text and remaining durability
+    expect(pencil.getText()).toBe("A");
+    expect(pencil.getDurability()).toBe(8);
+  });
 });

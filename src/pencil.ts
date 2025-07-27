@@ -39,7 +39,12 @@ export class Pencil {
   /**
    * Checks if the pencil is durable.
    * @returns True if the pencil has durability left, false otherwise.
+   * 
+   * Refactor Note:
+   * - This method was introduced to encapsulate the durability check logic.
+   * - It improves readability and avoids duplicating the durability check condition.
    */
+
   private isDurable(): boolean {
     return this.durability > 0;
   }
