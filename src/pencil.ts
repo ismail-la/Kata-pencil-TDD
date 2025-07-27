@@ -10,6 +10,7 @@
  * 1. Writing Text:
  *    - The pencil can write characters to a text buffer.
  *    - Writing a lowercase character reduces the pencil's durability by 1.
+ *    - Writing an uppercase character reduces the pencil's durability by 2.
  *    - Writing a space does not reduce durability.
  *
  * 2. Durability Tracking:
@@ -26,6 +27,9 @@
  * pencil.write("a");             // Write a lowercase letter
  * console.log(pencil.getText()); // Output: "a"
  * console.log(pencil.getDurability()); // Output: 9
+ * pencil.write("A");             // Write an uppercase letter
+ * console.log(pencil.getText()); // Output: "A"
+ * console.log(pencil.getDurability()); // Output: 8
  */
 
 export class Pencil {
@@ -61,9 +65,22 @@ export class Pencil {
    * Calculates the durability cost for a given character.
    * @param char - The character to calculate the cost for.
    * @returns The durability cost.
+   *
+   * Refactor Note:
+   * - This method was updated to improve readability and clarity.
+   * - Added explicit checks for uppercase and lowercase characters.
+   * - Ensures the logic is easy to follow and maintain.
    */
   private calculateDurabilityCost(char: string): number {
-    return char >= "A" && char <= "Z" ? 2 : 1;
+    if (char >= "A" && char <= "Z") {
+      // Uppercase letters cost 2 durability points
+      return 2;
+    } else if (char >= "a" && char <= "z") {
+      // Lowercase letters cost 1 durability point
+      return 1;
+    }
+    // Non-alphabetic characters (e.g., spaces) cost 0 durability points
+    return 0;
   }
 
   /**
