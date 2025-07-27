@@ -37,15 +37,31 @@ export class Pencil {
   }
 
   /**
+   * Checks if the pencil is durable.
+   * @returns True if the pencil has durability left, false otherwise.
+   */
+  private isDurable(): boolean {
+    return this.durability > 0;
+  }
+
+  /**
+   * Reduces the pencil's durability by a specified amount.
+   * @param amount - The amount to reduce durability by.
+   */
+  private reduceDurability(amount: number): void {
+    this.durability -= amount;
+  }
+
+  /**
    * Writes a single character to the text and reduces durability.
    * @param char - The character to write.
    */
   write(char: string): void {
-    if (this.durability > 0 && char !== " ") {
+    if (this.isDurable() && char !== " ") {
       this.text += char;
-      this.durability -= 1; // Lowercase letters reduce durability by 1
+      this.reduceDurability(1);
     } else {
-      this.text += char; // Spaces do not reduce durability
+      this.text += char;
     }
   }
 
