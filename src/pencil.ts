@@ -39,7 +39,7 @@ export class Pencil {
   /**
    * Checks if the pencil is durable.
    * @returns True if the pencil has durability left, false otherwise.
-   * 
+   *
    * Refactor Note:
    * - This method was introduced to encapsulate the durability check logic.
    * - It improves readability and avoids duplicating the durability check condition.
@@ -58,13 +58,23 @@ export class Pencil {
   }
 
   /**
+   * Calculates the durability cost for a given character.
+   * @param char - The character to calculate the cost for.
+   * @returns The durability cost.
+   */
+  private calculateDurabilityCost(char: string): number {
+    return char >= "A" && char <= "Z" ? 2 : 1;
+  }
+
+  /**
    * Writes a single character to the text and reduces durability.
    * @param char - The character to write.
    */
   write(char: string): void {
     if (this.isDurable() && char !== " ") {
       this.text += char;
-      this.reduceDurability(1);
+      const durabilityCost = this.calculateDurabilityCost(char);
+      this.reduceDurability(durabilityCost);
     } else {
       this.text += char;
     }
