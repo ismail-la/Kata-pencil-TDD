@@ -48,7 +48,6 @@ export class Pencil {
    * - This method was introduced to encapsulate the durability check logic.
    * - It improves readability and avoids duplicating the durability check condition.
    */
-
   private isDurable(): boolean {
     return this.durability > 0;
   }
@@ -84,23 +83,45 @@ export class Pencil {
   }
 
   /**
-   * Writes a single character to the text and reduces durability.
+   * Writes a single character to the text and reduces durability if applicable.
    * @param char - The character to write.
+   *
+   * Refactor Note:
+   * - Simplified the logic for handling spaces and durability checks.
+   * - Improved readability by separating space handling and durability logic.
    */
   write(char: string): void {
-    if (char === " ") {
+    if (this.isSpace(char)) {
       // Spaces do not reduce durability
-      this.text += char;
+      this.appendToText(char);
       return;
     }
 
     if (this.isDurable()) {
-      this.text += char;
-      const durabilityCost = this.calculateDurabilityCost(char);
-      this.reduceDurability(durabilityCost);
+      // Write the character and reduce durability based on its cost
+      this.appendToText(char);
+      this.reduceDurability(this.calculateDurabilityCost(char));
     } else {
-      this.text += char;
+      // If no durability is left, append the character as is
+      this.appendToText(char);
     }
+  }
+
+  /**
+   * Checks if the given character is a space or newline.
+   * @param char - The character to check.
+   * @returns True if the character is a space or newline, false otherwise.
+   */
+  private isSpace(char: string): boolean {
+    return char === " " || char === "\n";
+  }
+
+  /**
+   * Appends a character to the text buffer.
+   * @param char - The character to append.
+   */
+  private appendToText(char: string): void {
+    this.text += char;
   }
 
   /**
