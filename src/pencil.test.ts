@@ -88,4 +88,36 @@ describe("Pencil", () => {
     expect(pencil.getText()).toBe(" ");
     expect(pencil.getDurability()).toBe(10);
   });
+
+  /**
+   * Test Case: Stop Writing When Durability = 0
+   * --------------------------------------------
+   * This test case ensures that:
+   * 1. The pencil stops writing characters once its durability reaches zero.
+   * 2. Characters written after the durability is depleted are not added to the text.
+   * 3. Spaces are still written even when durability is zero, as they do not reduce durability.
+   *
+   * Steps:
+   * 1. Create a pencil instance with an initial durability of 1.
+   * 2. Write a character that reduces durability to zero.
+   * 3. Attempt to write another character after durability is depleted.
+   * 4. Verify that only the first character and spaces are written, and the second character is ignored.
+   */
+
+  test("should stop writing when durability is zero", () => {
+    // Arrange: Create a pencil with an initial durability of 1
+    const pencil = new Pencil(1);
+
+    // Act:
+    // 1. Write the first character, which reduces durability to zero.
+    pencil.write("a");
+
+    // 2. Attempt to write another character after durability is depleted.
+    pencil.write("b");
+
+    // Assert:
+    // 1. Verify that only the first character ("a") and spaces are written.
+    // 2. Verify that the second character ("b") is not written.
+    expect(pencil.getText()).toBe("a ");
+  });
 });
