@@ -21,23 +21,44 @@
  * 3. Text Retrieval:
  *    - The text written by the pencil can be retrieved using the `getText` method.
  *
+ * 4. Sharpening:
+ *    - The pencil can be sharpened to restore its durability to the initial value.
+ *    - Sharpening reduces the pencil's length.
+ *    - If the pencil's length is 0, sharpening has no effect.
+ *
  * Usage:
  * ------
- * const pencil = new Pencil(10); // Create a pencil with durability of 10
- * pencil.write("a");             // Write a lowercase letter
- * console.log(pencil.getText()); // Output: "a"
+ * const pencil = new Pencil(10, 5); // Create a pencil with durability of 10 and length of 5
+ * pencil.write("a");               // Write a lowercase letter
+ * console.log(pencil.getText());   // Output: "a"
  * console.log(pencil.getDurability()); // Output: 9
- * pencil.write("A");             // Write an uppercase letter
- * console.log(pencil.getText()); // Output: "A"
- * console.log(pencil.getDurability()); // Output: 8
+ * pencil.sharpen();                // Sharpen the pencil
+ * console.log(pencil.getDurability()); // Output: 10
+ * console.log(pencil.getLength()); // Output: 4
  */
 
 export class Pencil {
   private text: string = ""; // Stores the text written by the pencil
   private durability: number; // Tracks the remaining durability of the pencil
+  private initialDurability: number; // Stores the initial durability of the pencil
+  private length: number; // Tracks the remaining length of the pencil
 
-  constructor(durability: number) {
+  constructor(durability: number, length: number) {
     this.durability = durability;
+    this.initialDurability = durability;
+    this.length = length;
+    console.log(`Initial durability set to ${this.initialDurability}`);
+  }
+
+  /**
+   * Restores the pencil's durability to its initial value and reduces its length.
+   * If the pencil's length is 0, sharpening has no effect.
+   */
+  sharpen(): void {
+    if (this.length > 0) {
+      this.durability = this.initialDurability;
+      this.length -= 1;
+    }
   }
 
   /**
@@ -83,27 +104,27 @@ export class Pencil {
   }
 
   /**
-   * Writes a single character to the text and reduces durability if applicable.
-   * @param char - The character to write.
-   *
-   * Refactor Note:
-   * - Simplified the logic for handling spaces and durability checks.
-   * - Improved readability by separating space handling and durability logic.
+   * Writes a string of text to the text buffer and reduces durability if applicable.
+   * @param text - The string of text to write.
    */
-  write(char: string): void {
-    if (this.isSpace(char)) {
-      // Spaces do not reduce durability
-      this.appendToText(char);
-      return;
-    }
+  write(text: string): void {
+    for (const char of text) {
+      if (this.isSpace(char)) {
+        // Spaces do not reduce durability
+        this.appendToText(char);
+        continue;
+      }
 
-    if (this.isDurable()) {
-      // Write the character and reduce durability based on its cost
-      this.appendToText(char);
-      this.reduceDurability(this.calculateDurabilityCost(char));
-    } else {
-      // Handle the case where durability is zero
-      this.handleZeroDurability(char);
+      if (this.isDurable()) {
+        // Write the character and reduce durability based on its cost
+        const cost = this.calculateDurabilityCost(char);
+        console.log(`Writing '${char}' reduces durability by ${cost}`);
+        this.appendToText(char);
+        this.reduceDurability(cost);
+      } else {
+        // Handle the case where durability is zero
+        this.handleZeroDurability(char);
+      }
     }
   }
 
@@ -147,5 +168,13 @@ export class Pencil {
    */
   getDurability(): number {
     return this.durability;
+  }
+
+  /**
+   * Retrieves the current length of the pencil.
+   * @returns The remaining length.
+   */
+  getLength(): number {
+    return this.length;
   }
 }

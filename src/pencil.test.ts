@@ -23,8 +23,8 @@ import { Pencil } from "./pencil";
 
 describe("Pencil", () => {
   test("should write a lowercase character and reduce durability by 1", () => {
-    // Arrange: Create a pencil with an initial durability of 10
-    const pencil = new Pencil(10);
+    // Arrange: Create a pencil with an initial durability of 10 and length of 5
+    const pencil = new Pencil(10, 5);
 
     // Act: Write a lowercase letter
     pencil.write("a");
@@ -49,8 +49,8 @@ describe("Pencil", () => {
    *    is reduced by 2.
    */
   test("should write an uppercase letter and reduce durability by 2", () => {
-    // Arrange: Create a pencil with an initial durability of 10
-    const pencil = new Pencil(10);
+    // Arrange: Create a pencil with an initial durability of 10 and length of 5
+    const pencil = new Pencil(10, 5);
 
     // Act: Write an uppercase letter
     pencil.write("A");
@@ -76,8 +76,8 @@ describe("Pencil", () => {
    */
 
   test("should write spaces without reducing durability", () => {
-    // Arrange: Create a pencil with an initial durability of 10
-    const pencil = new Pencil(10);
+    // Arrange: Create a pencil with an initial durability of 10 and length of 5
+    const pencil = new Pencil(10, 5);
 
     // Act: Write a space character
     pencil.write(" ");
@@ -105,8 +105,8 @@ describe("Pencil", () => {
    */
 
   test("should stop writing when durability is zero", () => {
-    // Arrange: Create a pencil with an initial durability of 1
-    const pencil = new Pencil(1);
+    // Arrange: Create a pencil with an initial durability of 1 and length of 5
+    const pencil = new Pencil(1, 5);
 
     // Act:
     // 1. Write the first character, which reduces durability to zero.
