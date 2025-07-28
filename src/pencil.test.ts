@@ -161,4 +161,28 @@ describe("Pencil", () => {
     expect(pencil.getLength()).toBe(0);
     expect(pencil.getDurability()).toBe(10);
   });
+
+  /**
+   * Test Case: Erasing the Last Occurrence of a Word
+   * -------------------------------------------------
+   * This test case ensures that:
+   * 1. The pencil can erase the last occurrence of a word from the text.
+   * 2. Erased characters are replaced with spaces.
+   *
+   * Steps:
+   * 1. Create a pencil instance and write some text.
+   * 2. Erase the last occurrence of a word.
+   * 3. Verify that the word is replaced with spaces in the text.
+   */
+  test("should erase the last occurrence of a word", () => {
+    // Arrange: Create a pencil and write some text
+    const pencil = new Pencil(10);
+    pencil.write("hello world hello");
+
+    // Act: Erase the last occurrence of "hello"
+    pencil.erase("hello");
+
+    // Assert: Verify the last occurrence is replaced with spaces
+    expect(pencil.getText()).toBe("hello world      ");
+  });
 });
