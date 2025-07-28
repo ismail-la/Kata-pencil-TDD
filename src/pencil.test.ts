@@ -134,10 +134,31 @@ describe("Pencil", () => {
    * 2. Erase the last occurrence of a word.
    * 3. Verify that the word is replaced with spaces in the text.
    */
-it("should erase the last occurrence of a word", () => {
-  const pencil = new Pencil(20, 5); // 💡 ensure enough durability
-  pencil.write("hello world hello");
-  pencil.erase("hello");
-  expect(pencil.getText()).toBe("hello world      ");
-});
+  it("should erase the last occurrence of a word", () => {
+    const pencil = new Pencil(20, 5); // 💡 ensure enough durability
+    pencil.write("hello world hello");
+    pencil.erase("hello");
+    expect(pencil.getText()).toBe("hello world      ");
+  });
+
+  /**
+   * Test Case: Erasing Reduces Eraser Durability
+   * ---------------------------------------------
+   * This test case ensures that:
+   * 1. Erasing characters reduces the eraser's durability.
+   * 2. Erasing stops when the eraser's durability is exhausted.
+   *
+   * Steps:
+   * 1. Create a pencil instance with an eraser durability of 3.
+   * 2. Write some text and erase part of it.
+   * 3. Verify that only characters up to the eraser's durability are erased.
+   * 4. Verify the remaining eraser durability.
+   */
+  test("erasing reduces eraser durability, stops when exhausted", () => {
+    const pencil = new Pencil(10, 2, 3); // durability, length, eraserDurability
+    pencil.write("erase me");
+    pencil.erase("me");
+    expect(pencil.getText()).toBe("erase  "); // only 2 chars erased, 1 left
+    expect(pencil.getEraserDurability()).toBe(1);
+  });
 });
