@@ -23,13 +23,8 @@ import { Pencil } from "./pencil";
 
 describe("Pencil", () => {
   test("should write a lowercase character and reduce durability by 1", () => {
-    // Arrange: Create a pencil with an initial durability of 10 and length of 5
-    const pencil = new Pencil(10, 5);
-
-    // Act: Write a lowercase letter
+    const pencil = new Pencil(10, 5); // Add length argument
     pencil.write("a");
-
-    // Assert: Verify the written text and remaining durability
     expect(pencil.getText()).toBe("a");
     expect(pencil.getDurability()).toBe(9);
   });
@@ -49,13 +44,8 @@ describe("Pencil", () => {
    *    is reduced by 2.
    */
   test("should write an uppercase letter and reduce durability by 2", () => {
-    // Arrange: Create a pencil with an initial durability of 10 and length of 5
-    const pencil = new Pencil(10, 5);
-
-    // Act: Write an uppercase letter
+    const pencil = new Pencil(10, 5); // Add length argument
     pencil.write("A");
-
-    // Assert: Verify the written text and remaining durability
     expect(pencil.getText()).toBe("A");
     expect(pencil.getDurability()).toBe(8);
   });
@@ -76,15 +66,8 @@ describe("Pencil", () => {
    */
 
   test("should write spaces without reducing durability", () => {
-    // Arrange: Create a pencil with an initial durability of 10 and length of 5
-    const pencil = new Pencil(10, 5);
-
-    // Act: Write a space character
+    const pencil = new Pencil(10, 5); // Add length argument
     pencil.write(" ");
-
-    // Assert:
-    // 1. Verify that the written text matches the input (" ").
-    // 2. Verify that the pencil's durability remains unchanged (10).
     expect(pencil.getText()).toBe(" ");
     expect(pencil.getDurability()).toBe(10);
   });
@@ -105,19 +88,9 @@ describe("Pencil", () => {
    */
 
   test("should stop writing when durability is zero", () => {
-    // Arrange: Create a pencil with an initial durability of 1 and length of 5
-    const pencil = new Pencil(1, 5);
-
-    // Act:
-    // 1. Write the first character, which reduces durability to zero.
+    const pencil = new Pencil(1, 5); // Add length argument
     pencil.write("a");
-
-    // 2. Attempt to write another character after durability is depleted.
     pencil.write("b");
-
-    // Assert:
-    // 1. Verify that only the first character ("a") and spaces are written.
-    // 2. Verify that the second character ("b") is not written.
     expect(pencil.getText()).toBe("a ");
   });
 
@@ -136,28 +109,15 @@ describe("Pencil", () => {
    * 4. Attempt to sharpen the pencil when length is 0 and verify no changes occur.
    */
   test("should restore durability and reduce length when sharpened", () => {
-    // Arrange: Create a pencil with durability 10 and length 3
-    const pencil = new Pencil(10, 3);
-
-    // Act: Write some text to reduce durability
+    const pencil = new Pencil(10, 3); // Add length argument
     pencil.write("hello");
-
-    // Assert: Verify durability is reduced
     expect(pencil.getDurability()).toBe(5);
-
-    // Act: Sharpen the pencil
     pencil.sharpen();
-
-    // Assert: Verify durability is restored and length is reduced
     expect(pencil.getDurability()).toBe(10);
     expect(pencil.getLength()).toBe(2);
-
-    // Act: Sharpen the pencil until length is 0
     pencil.sharpen();
     pencil.sharpen();
     pencil.sharpen(); // No effect when length is 0
-
-    // Assert: Verify length is 0 and durability is not restored
     expect(pencil.getLength()).toBe(0);
     expect(pencil.getDurability()).toBe(10);
   });
@@ -174,15 +134,10 @@ describe("Pencil", () => {
    * 2. Erase the last occurrence of a word.
    * 3. Verify that the word is replaced with spaces in the text.
    */
-  test("should erase the last occurrence of a word", () => {
-    // Arrange: Create a pencil and write some text
-    const pencil = new Pencil(10);
-    pencil.write("hello world hello");
-
-    // Act: Erase the last occurrence of "hello"
-    pencil.erase("hello");
-
-    // Assert: Verify the last occurrence is replaced with spaces
-    expect(pencil.getText()).toBe("hello world      ");
-  });
+it("should erase the last occurrence of a word", () => {
+  const pencil = new Pencil(20, 5); // 💡 ensure enough durability
+  pencil.write("hello world hello");
+  pencil.erase("hello");
+  expect(pencil.getText()).toBe("hello world      ");
+});
 });

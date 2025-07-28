@@ -26,6 +26,10 @@
  *    - Sharpening reduces the pencil's length.
  *    - If the pencil's length is 0, sharpening has no effect.
  *
+ * 5. Erasing:
+ *    - The pencil can erase the last occurrence of a word from the text buffer.
+ *    - Erased words are replaced with spaces.
+ *
  * Usage:
  * ------
  * const pencil = new Pencil(10, 5); // Create a pencil with durability of 10 and length of 5
@@ -35,6 +39,8 @@
  * pencil.sharpen();                // Sharpen the pencil
  * console.log(pencil.getDurability()); // Output: 10
  * console.log(pencil.getLength()); // Output: 4
+ * pencil.erase("a");               // Erase the last occurrence of "a"
+ * console.log(pencil.getText());   // Output: " "
  */
 
 export class Pencil {
@@ -47,7 +53,6 @@ export class Pencil {
     this.durability = durability;
     this.initialDurability = durability;
     this.length = length;
-    console.log(`Initial durability set to ${this.initialDurability}`);
   }
 
   /**
@@ -174,6 +179,25 @@ export class Pencil {
    */
   private appendToText(char: string): void {
     this.text += char;
+  }
+
+  /**
+   * Erases the last occurrence of a word from the text buffer.
+   * @param word - The word to erase.
+   */
+  erase(word: string): void {
+    // Find the last occurrence of the word, even if it overlaps with spaces
+    const lastIndex = this.text.lastIndexOf(word);
+    if (lastIndex !== -1) {
+      // Replace only the non-space characters in the last occurrence with spaces
+      const chars = this.text.split("");
+      for (let i = lastIndex + word.length - 1; i >= lastIndex; i--) {
+        if (chars[i] !== " ") {
+          chars[i] = " ";
+        }
+      }
+      this.text = chars.join("");
+    }
   }
 
   /**
