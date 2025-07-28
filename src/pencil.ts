@@ -55,10 +55,32 @@ export class Pencil {
    * If the pencil's length is 0, sharpening has no effect.
    */
   sharpen(): void {
-    if (this.length > 0) {
-      this.durability = this.initialDurability;
-      this.length -= 1;
+    if (this.canSharpen()) {
+      this.restoreDurability();
+      this.reduceLength();
     }
+  }
+
+  /**
+   * Checks if the pencil can be sharpened.
+   * @returns True if the pencil's length is greater than 0, false otherwise.
+   */
+  private canSharpen(): boolean {
+    return this.length > 0;
+  }
+
+  /**
+   * Restores the pencil's durability to its initial value.
+   */
+  private restoreDurability(): void {
+    this.durability = this.initialDurability;
+  }
+
+  /**
+   * Reduces the pencil's length by 1.
+   */
+  private reduceLength(): void {
+    this.length -= 1;
   }
 
   /**
