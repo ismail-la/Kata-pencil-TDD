@@ -120,4 +120,45 @@ describe("Pencil", () => {
     // 2. Verify that the second character ("b") is not written.
     expect(pencil.getText()).toBe("a ");
   });
+
+  /**
+   * Test Case: Sharpening the Pencil
+   * ---------------------------------
+   * This test case ensures that:
+   * 1. Sharpening restores the pencil's durability to its initial value.
+   * 2. Sharpening reduces the pencil's length by 1.
+   * 3. The pencil cannot be sharpened if its length is 0.
+   *
+   * Steps:
+   * 1. Create a pencil instance with an initial durability of 10 and length of 3.
+   * 2. Write some text to reduce durability.
+   * 3. Sharpen the pencil and verify durability is restored and length is reduced.
+   * 4. Attempt to sharpen the pencil when length is 0 and verify no changes occur.
+   */
+  test("should restore durability and reduce length when sharpened", () => {
+    // Arrange: Create a pencil with durability 10 and length 3
+    const pencil = new Pencil(10, 3);
+
+    // Act: Write some text to reduce durability
+    pencil.write("hello");
+
+    // Assert: Verify durability is reduced
+    expect(pencil.getDurability()).toBe(5);
+
+    // Act: Sharpen the pencil
+    pencil.sharpen();
+
+    // Assert: Verify durability is restored and length is reduced
+    expect(pencil.getDurability()).toBe(10);
+    expect(pencil.getLength()).toBe(2);
+
+    // Act: Sharpen the pencil until length is 0
+    pencil.sharpen();
+    pencil.sharpen();
+    pencil.sharpen(); // No effect when length is 0
+
+    // Assert: Verify length is 0 and durability is not restored
+    expect(pencil.getLength()).toBe(0);
+    expect(pencil.getDurability()).toBe(10);
+  });
 });
