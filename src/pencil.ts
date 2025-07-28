@@ -182,22 +182,15 @@ export class Pencil {
   }
 
   /**
-   * Erases the last occurrence of a word from the text buffer.
-   * @param word - The word to erase.
+   * Erases the last occurrence of the given word by replacing it with spaces.
+   * If the word is not found, nothing happens.
    */
   erase(word: string): void {
-    // Find the last occurrence of the word, even if it overlaps with spaces
-    const lastIndex = this.text.lastIndexOf(word);
-    if (lastIndex !== -1) {
-      // Replace only the non-space characters in the last occurrence with spaces
-      const chars = this.text.split("");
-      for (let i = lastIndex + word.length - 1; i >= lastIndex; i--) {
-        if (chars[i] !== " ") {
-          chars[i] = " ";
-        }
-      }
-      this.text = chars.join("");
-    }
+    const idx = this.text.lastIndexOf(word);
+    if (idx === -1) return;
+    const before = this.text.slice(0, idx);
+    const after = this.text.slice(idx + word.length);
+    this.text = before + " ".repeat(word.length) + after;
   }
 
   /**
