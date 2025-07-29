@@ -220,21 +220,22 @@ export class Pencil {
   }
 
   /**
-   * Edits the first sequence of blank spaces by writing the given word.
-   * If a non-blank character is encountered, replaces it with '@'.
-   * Editing stops at the end of the word.
+   * Edits the first sequence of consecutive blank spaces by inserting the provided word.
+   * If a non-blank character is encountered during editing, it is replaced with '@' to indicate a collision.
+   * Editing stops at the end of the blank sequence or when the word is fully inserted.
+   * @param word - The word to insert into the first blank space sequence.
    */
   edit(word: string): void {
-    // Find the first sequence of spaces (at least one)
-    const match = this.text.match(/ +/);
+    // Find the first sequence of two or more spaces (erased area)
+    const match = this.text.match(/ {2,}/);
     if (!match) return;
-    let start = match.index!;
+    const start = match.index!;
     const chars = this.text.split("");
     for (let i = 0; i < word.length && start + i < chars.length; i++) {
       if (chars[start + i] === " ") {
         chars[start + i] = word[i];
       } else {
-        // Collision: replace with '@'
+        // Collision: overwrite non-space with '@'
         chars[start + i] = "@";
       }
     }
