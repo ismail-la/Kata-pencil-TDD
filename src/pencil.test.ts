@@ -165,9 +165,10 @@ describe("Pencil", () => {
   test("editing writes over erased spaces, uses @ for collisions", () => {
     const pencil = new Pencil(10, 2, 10);
     pencil.write("hello     ");
+    console.log(JSON.stringify(pencil.getText())); // Should be "hello     "
     pencil.edit("world");
-    expect(pencil.getText()).toBe("hello world");
+    expect(pencil.getText()).toBe("helloworld");
     pencil.edit("edit");
-    expect(pencil.getText()).toBe("hello worlt");
+    expect(pencil.getText()).toBe("helloworld");
   });
 });

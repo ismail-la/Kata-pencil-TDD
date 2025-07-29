@@ -168,8 +168,12 @@ export class Pencil {
    * @param char - The character to handle.
    */
   private handleZeroDurability(char: string): void {
-    // Append a space instead of the character
-    this.appendToText(" ");
+    // If the character is a space, keep it; otherwise, append a space
+    if (this.isSpace(char)) {
+      this.appendToText(char);
+    } else {
+      this.appendToText(" ");
+    }
   }
 
   /**
@@ -213,6 +217,28 @@ export class Pencil {
         this.eraserDurability--;
       }
     }
+  }
+
+  /**
+   * Edits the first sequence of blank spaces by writing the given word.
+   * If a non-blank character is encountered, replaces it with '@'.
+   * Editing stops at the end of the word.
+   */
+  edit(word: string): void {
+    // Find the first sequence of spaces (at least one)
+    const match = this.text.match(/ +/);
+    if (!match) return;
+    let start = match.index!;
+    const chars = this.text.split("");
+    for (let i = 0; i < word.length && start + i < chars.length; i++) {
+      if (chars[start + i] === " ") {
+        chars[start + i] = word[i];
+      } else {
+        // Collision: replace with '@'
+        chars[start + i] = "@";
+      }
+    }
+    this.text = chars.join("");
   }
 
   /**
