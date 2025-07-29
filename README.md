@@ -65,6 +65,47 @@ pencil.edit("Mars");
 console.log(pencil.getText());
 ```
 
+## Command-Line Demo
+
+You can see the Pencil class in action with the included CLI demo:
+
+```typescript
+// src/index.ts
+
+import { Pencil } from "./pencil";
+
+// Create a pencil with durability 10, length 3, eraser durability 5
+const pencil = new Pencil(10, 3, 5);
+
+// Write some text
+pencil.write("Hello World");
+
+// Erase the word "World"
+pencil.erase("World");
+
+// Sharpen the pencil (restores durability, reduces length)
+pencil.sharpen();
+
+// Edit the first blank space (from erased "World") with "Mars"
+pencil.edit("Mars");
+
+// Output the final text
+console.log(pencil.getText()); // Output: Hello WorMa
+```
+
+To run this demo:
+
+```bash
+npm run start
+```
+
+## Project Structure
+
+- `src/pencil.ts` – Pencil class implementation
+- `src/pencil.test.ts` – Test suite
+- `src/index.ts` – Command-line demo
+- `README.md` – Documentation
+
 ## Tests
 
 The project includes a comprehensive test suite to verify the behavior of the Pencil class. Below are the key test cases:
@@ -193,7 +234,6 @@ pencil3.write("hello");
 pencil3.edit("world");
 console.log(pencil3.getText()); // Output: "hello"
 ```
-
 
 ### Additional Edge Cases Covered
 
