@@ -196,20 +196,23 @@ export class Pencil {
   erase(word: string): void {
     const idx = this.text.lastIndexOf(word);
     if (idx === -1) return;
+    const chars = this.text.split("");
+    this.eraseWithDurability(chars, idx, idx + word.length - 1);
+    this.text = chars.join("");
+  }
 
-    let chars = this.text.split("");
-    let erased = 0;
-    // Only erase up to the word length, not more
-    for (let i = idx + word.length - 1; i >= idx; i--) {
-      if (chars[i] !== " " && this.eraserDurability > 0) {
+  private eraseWithDurability(
+    chars: string[],
+    start: number,
+    end: number
+  ): void {
+    // Erase characters from end to start, reducing eraser durability for each non-space
+    for (let i = end; i >= start; i--) {
+      if (this.eraserDurability > 0 && chars[i] !== " ") {
         chars[i] = " ";
         this.eraserDurability--;
-        erased++;
       }
-      // Stop if we've erased as many non-space chars as the word length or eraser is exhausted
-      if (erased >= word.length || this.eraserDurability === 0) break;
     }
-    this.text = chars.join("");
   }
 
   /**
