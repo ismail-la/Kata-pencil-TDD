@@ -158,7 +158,7 @@ describe("Pencil", () => {
     const pencil = new Pencil(10, 2, 3); // durability, length, eraserDurability
     pencil.write("erase me");
     pencil.erase("me");
-    expect(pencil.getText()).toBe("erase  "); // only 2 chars erased, 1 left
+    expect(pencil.getText()).toBe("erase   "); // 9 chars: "erase" + 3 spaces
     expect(pencil.getEraserDurability()).toBe(1);
   });
 });

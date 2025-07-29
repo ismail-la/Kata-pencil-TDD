@@ -29,10 +29,11 @@
  * 5. Erasing:
  *    - The pencil can erase the last occurrence of a word from the text buffer.
  *    - Erased words are replaced with spaces.
+ *    - Erasing reduces the eraser's durability.
  *
  * Usage:
  * ------
- * const pencil = new Pencil(10, 5); // Create a pencil with durability of 10 and length of 5
+ * const pencil = new Pencil(10, 5, 10); // Create a pencil with durability of 10, length of 5, and eraser durability of 10
  * pencil.write("a");               // Write a lowercase letter
  * console.log(pencil.getText());   // Output: "a"
  * console.log(pencil.getDurability()); // Output: 9
@@ -41,6 +42,7 @@
  * console.log(pencil.getLength()); // Output: 4
  * pencil.erase("a");               // Erase the last occurrence of "a"
  * console.log(pencil.getText());   // Output: " "
+ * console.log(pencil.getEraserDurability()); // Output: 9
  */
 
 export class Pencil {
@@ -48,11 +50,17 @@ export class Pencil {
   private durability: number; // Tracks the remaining durability of the pencil
   private initialDurability: number; // Stores the initial durability of the pencil
   private length: number; // Tracks the remaining length of the pencil
+  private eraserDurability: number; // Tracks the remaining durability of the eraser
 
-  constructor(durability: number, length: number) {
+  constructor(
+    durability: number,
+    length: number = 1,
+    eraserDurability: number = 10
+  ) {
     this.durability = durability;
     this.initialDurability = durability;
     this.length = length;
+    this.eraserDurability = eraserDurability;
   }
 
   /**
@@ -183,14 +191,25 @@ export class Pencil {
 
   /**
    * Erases the last occurrence of the given word by replacing it with spaces.
-   * If the word is not found, nothing happens.
+   * Only as many characters as the word length (or eraser durability) are erased, starting from the end of the word.
    */
   erase(word: string): void {
     const idx = this.text.lastIndexOf(word);
     if (idx === -1) return;
-    const before = this.text.slice(0, idx);
-    const after = this.text.slice(idx + word.length);
-    this.text = before + " ".repeat(word.length) + after;
+
+    let chars = this.text.split("");
+    let erased = 0;
+    // Only erase up to the word length, not more
+    for (let i = idx + word.length - 1; i >= idx; i--) {
+      if (chars[i] !== " " && this.eraserDurability > 0) {
+        chars[i] = " ";
+        this.eraserDurability--;
+        erased++;
+      }
+      // Stop if we've erased as many non-space chars as the word length or eraser is exhausted
+      if (erased >= word.length || this.eraserDurability === 0) break;
+    }
+    this.text = chars.join("");
   }
 
   /**
@@ -215,5 +234,13 @@ export class Pencil {
    */
   getLength(): number {
     return this.length;
+  }
+
+  /**
+   * Retrieves the current durability of the eraser.
+   * @returns The remaining eraser durability.
+   */
+  getEraserDurability(): number {
+    return this.eraserDurability;
   }
 }
