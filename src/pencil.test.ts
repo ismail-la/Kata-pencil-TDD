@@ -161,4 +161,13 @@ describe("Pencil", () => {
     expect(pencil.getText()).toBe("erase   "); // 9 chars: "erase" + 3 spaces
     expect(pencil.getEraserDurability()).toBe(1);
   });
+
+  test("editing writes over erased spaces, uses @ for collisions", () => {
+    const pencil = new Pencil(10, 2, 10);
+    pencil.write("hello     ");
+    pencil.edit("world");
+    expect(pencil.getText()).toBe("hello world");
+    pencil.edit("edit");
+    expect(pencil.getText()).toBe("hello worlt");
+  });
 });
