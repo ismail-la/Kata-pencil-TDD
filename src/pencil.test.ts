@@ -171,4 +171,35 @@ describe("Pencil", () => {
     pencil.edit("edit");
     expect(pencil.getText()).toBe("helloworld");
   });
+
+  test("should not erase if word is not found", () => {
+    const pencil = new Pencil(10, 2, 5);
+    pencil.write("hello world");
+    pencil.erase("missing");
+    expect(pencil.getText()).toBe("hello world");
+  });
+
+  test("should not sharpen if length is zero", () => {
+    const pencil = new Pencil(5, 1);
+    pencil.write("abcde");
+    pencil.sharpen(); // length 0 now
+    pencil.write("f");
+    expect(pencil.getLength()).toBe(0);
+    expect(pencil.getDurability()).toBe(4); // not restored
+  });
+
+  test("should not edit if no blank spaces", () => {
+    const pencil = new Pencil(10, 2, 10);
+    pencil.write("hello");
+    pencil.edit("world");
+    expect(pencil.getText()).toBe("hello");
+  });
+
+  test("should handle erasing with eraser durability less than word length", () => {
+    const pencil = new Pencil(10, 2, 2);
+    pencil.write("erase");
+    pencil.erase("erase");
+    expect(pencil.getText()).toBe("era  ");
+    expect(pencil.getEraserDurability()).toBe(0);
+  });
 });
