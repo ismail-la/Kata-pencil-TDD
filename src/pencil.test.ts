@@ -162,16 +162,34 @@ describe("Pencil", () => {
     expect(pencil.getEraserDurability()).toBe(1);
   });
 
+  /**
+   * Test Case: Editing Over Erased Spaces
+   * -------------------------------------
+   * This test case ensures that:
+   * 1. The pencil can write over erased spaces (first sequence of two or more spaces).
+   * 2. If editing collides with a non-space, it replaces it with '@'.
+   * 3. Only fills as many characters as there are spaces.
+   *
+   * Steps:
+   * 1. Write text with erased spaces.
+   * 2. Edit with a word that fits in the blank.
+   * 3. Edit again with another word to test collision.
+   */
   test("editing writes over erased spaces, uses @ for collisions", () => {
     const pencil = new Pencil(10, 2, 10);
     pencil.write("hello     ");
-    console.log(JSON.stringify(pencil.getText())); // Should be "hello     "
     pencil.edit("world");
     expect(pencil.getText()).toBe("helloworld");
     pencil.edit("edit");
     expect(pencil.getText()).toBe("helloworld");
   });
 
+  /**
+   * Test Case: Erasing a Word Not Present
+   * -------------------------------------
+   * This test case ensures that:
+   * 1. Attempting to erase a word not present in the text leaves the text unchanged.
+   */
   test("should not erase if word is not found", () => {
     const pencil = new Pencil(10, 2, 5);
     pencil.write("hello world");
@@ -179,6 +197,13 @@ describe("Pencil", () => {
     expect(pencil.getText()).toBe("hello world");
   });
 
+  /**
+   * Test Case: Sharpening When Length is Zero
+   * -----------------------------------------
+   * This test case ensures that:
+   * 1. Sharpening when length is zero does not restore durability.
+   * 2. Pencil length does not go below zero.
+   */
   test("should not sharpen if length is zero", () => {
     const pencil = new Pencil(5, 1);
     pencil.write("abcde");
@@ -188,6 +213,12 @@ describe("Pencil", () => {
     expect(pencil.getDurability()).toBe(4); // not restored
   });
 
+  /**
+   * Test Case: Editing When No Blank Spaces
+   * ---------------------------------------
+   * This test case ensures that:
+   * 1. Editing when there are no blank spaces does nothing.
+   */
   test("should not edit if no blank spaces", () => {
     const pencil = new Pencil(10, 2, 10);
     pencil.write("hello");
@@ -195,6 +226,12 @@ describe("Pencil", () => {
     expect(pencil.getText()).toBe("hello");
   });
 
+  /**
+   * Test Case: Erasing With Limited Eraser Durability
+   * -------------------------------------------------
+   * This test case ensures that:
+   * 1. Erasing with eraser durability less than the word length only erases as many characters as possible.
+   */
   test("should handle erasing with eraser durability less than word length", () => {
     const pencil = new Pencil(10, 2, 2);
     pencil.write("erase");

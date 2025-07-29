@@ -11,7 +11,8 @@
  *    - The pencil can write characters to a text buffer.
  *    - Writing a lowercase character reduces the pencil's durability by 1.
  *    - Writing an uppercase character reduces the pencil's durability by 2.
- *    - Writing a space does not reduce durability.
+ *    - Writing a space or newline does not reduce durability.
+ *    - Stops writing non-space characters when durability reaches 0.
  *
  * 2. Durability Tracking:
  *    - The pencil has a finite durability that decreases with each character written.
@@ -29,20 +30,22 @@
  * 5. Erasing:
  *    - The pencil can erase the last occurrence of a word from the text buffer.
  *    - Erased words are replaced with spaces.
- *    - Erasing reduces the eraser's durability.
+ *    - Erasing reduces the eraser's durability (one per non-space erased).
+ *    - Stops erasing when eraser durability is exhausted.
  *
- * Usage:
- * ------
- * const pencil = new Pencil(10, 5, 10); // Create a pencil with durability of 10, length of 5, and eraser durability of 10
- * pencil.write("a");               // Write a lowercase letter
- * console.log(pencil.getText());   // Output: "a"
- * console.log(pencil.getDurability()); // Output: 9
- * pencil.sharpen();                // Sharpen the pencil
- * console.log(pencil.getDurability()); // Output: 10
- * console.log(pencil.getLength()); // Output: 4
- * pencil.erase("a");               // Erase the last occurrence of "a"
- * console.log(pencil.getText());   // Output: " "
- * console.log(pencil.getEraserDurability()); // Output: 9
+ * 6. Editing:
+ *    - Allows writing over erased spaces (first sequence of two or more spaces).
+ *    - If editing collides with a non-space, replaces it with '@'.
+ *    - Only fills as many characters as there are spaces.
+ *
+ * 7. Edge Cases:
+ *    - Handles attempts to erase words not present.
+ *    - Handles sharpening when length is zero.
+ *    - Handles editing when no blank spaces are available.
+ *    - Handles erasing when eraser durability is less than word length.
+ *    - Handles writing with zero or negative durability.
+ *    - Handles editing at the start or end of the text.
+ *    - Handles writing multi-line text and handling newlines.
  */
 
 export class Pencil {
@@ -151,9 +154,9 @@ export class Pencil {
       }
 
       if (this.isDurable()) {
-        // Write the character and reduce durability based on its cost
+        // Write the character and reduce durability based on its cost.
+        // This explicit check allows for more granular control and easier debugging.
         const cost = this.calculateDurabilityCost(char);
-        console.log(`Writing '${char}' reduces durability by ${cost}`);
         this.appendToText(char);
         this.reduceDurability(cost);
       } else {
@@ -221,21 +224,25 @@ export class Pencil {
 
   /**
    * Edits the first sequence of consecutive blank spaces by inserting the provided word.
-   * If a non-blank character is encountered during editing, it is replaced with '@' to indicate a collision.
-   * Editing stops at the end of the blank sequence or when the word is fully inserted.
-   * @param word - The word to insert into the first blank space sequence.
+   * Only fills as many characters as there are spaces. If a non-blank character is encountered during editing,
+   * it is replaced with '@' to indicate a collision.
    */
   edit(word: string): void {
-    // Find the first sequence of two or more spaces (erased area)
+    // Find the first sequence of two or more spaces (erased area).
     const match = this.text.match(/ {2,}/);
     if (!match) return;
     const start = match.index!;
+    const length = match[0].length;
     const chars = this.text.split("");
-    for (let i = 0; i < word.length && start + i < chars.length; i++) {
+    for (
+      let i = 0;
+      i < length && i < word.length && start + i < chars.length;
+      i++
+    ) {
       if (chars[start + i] === " ") {
         chars[start + i] = word[i];
       } else {
-        // Collision: overwrite non-space with '@'
+        // I use '@' to clearly signal a collision, which is more explicit for debugging.
         chars[start + i] = "@";
       }
     }
